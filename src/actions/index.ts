@@ -23,30 +23,40 @@ export async function createSnippet(
   formState: { message: string },
   formData: FormData
 ) {
-  //Check the users inputs and make sure theryre valid
-  const title = formData.get("title");
-  const code = formData.get("code");
+  try {
+    //Check the users inputs and make sure theryre valid
+    const title = formData.get("title");
+    const code = formData.get("code");
 
-  if (typeof title !== "string" || title.length < 3) {
-    return {
-      message: "Title must be longer",
-    };
+    if (typeof title !== "string" || title.length < 3) {
+      return {
+        message: "Title must be longer",
+      };
+    }
+    if (typeof code !== "string" || title.length < 10) {
+      return {
+        message: "Code must be longer",
+      };
+    }
+    //Create a new record in the database
+
+    await db.snippet.create({
+      data: {
+        title,
+        code,
+      },
+    });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return {
+        message: error.message,
+      };
+    } else {
+      return {
+        message: "Something went wrong",
+      };
+    }
   }
-  if (typeof code !== "string" || title.length < 10) {
-    return {
-      message: "Code must be longer",
-    };
-  }
-
-  //Create a new record in the database
-
-  const snippet = await db.snippet.create({
-    data: {
-      title,
-      code,
-    },
-  });
   //redirect the user back to root route
-
   redirect("/");
 }
