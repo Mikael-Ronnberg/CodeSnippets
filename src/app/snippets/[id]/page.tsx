@@ -4,9 +4,9 @@ import Link from "next/link";
 import * as actions from "@/actions";
 
 interface SnippetShowPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function SnuppetShowPAge(props: SnippetShowPageProps) {
